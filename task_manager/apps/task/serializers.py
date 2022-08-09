@@ -7,11 +7,13 @@ from .models import Task
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('name',
-                  'description',
-                  'status',
-                  'executor',
-                  'labels',)
+        fields = (
+            'name',
+            'description',
+            'status',
+            'executor',
+            'labels',
+        )
 
     def set_author(self, author_pk: int):
         """Add author for task object.
