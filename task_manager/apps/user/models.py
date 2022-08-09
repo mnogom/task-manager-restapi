@@ -1,3 +1,32 @@
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.validators import EmailValidator
 from django.db import models  # noqa: F401
 
-# Create your models here.
+
+class User(AbstractUser):
+    username_validator = UnicodeUsernameValidator()
+    email_validator = EmailValidator()
+    username = models.CharField(verbose_name='username',
+                                max_length=150,
+                                unique=True,
+                                help_text='Your username must be unique',
+                                validators=[username_validator],
+                                error_messages={
+                                    'unique': 'A user with that username already exists.'})
+    email = models.CharField(verbose_name='email',
+                             max_length=150,
+                             blank=True,
+                             null=True,
+                             # unique=True,
+                             help_text='Your email must exists and be unique.',
+                             validators=[email_validator],
+                             error_messages={
+                                 'unique': 'A user with that email already exists.'})
+
+    def __str__(self):
+        return self.get_full_name() or f'@{self.username}'
+
+    class Meta(AbstractUser.Meta):
+        swappable = 'AUTH_USER_MODEL'
