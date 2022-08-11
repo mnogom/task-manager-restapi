@@ -1,7 +1,12 @@
 """task_manager URL Configuration"""
 
+"""
+    Djoser provides this urls:
+    path('auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
+"""
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
@@ -10,5 +15,6 @@ urlpatterns = [
     path('labels/', include('task_manager.apps.label.urls')),
     path('statuses/', include('task_manager.apps.status.urls')),
     path('task/', include('task_manager.apps.task.urls')),
-    path('auth/', obtain_auth_token, name='auth'),
+    path('auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
