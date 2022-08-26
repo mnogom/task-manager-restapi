@@ -1,9 +1,8 @@
 """Views."""
 
-from django.shortcuts import render
 from rest_framework.generics import (ListCreateAPIView,
                                      RetrieveUpdateDestroyAPIView)
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated  # noqa: F401
 from .models import Task
 from .serializers import TaskSerializer
 
