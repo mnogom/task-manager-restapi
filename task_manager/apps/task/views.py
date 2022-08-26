@@ -8,13 +8,21 @@ from .serializers import TaskSerializer
 
 
 class ListCreateTaskView(ListCreateAPIView):
-    # permission_classes = (IsAuthenticated,)
+    # TODO:
+    #  1. Fix create feature. Possible solution:
+    #  https://github.com/beda-software/drf-writable-nested
+    #  2. Uncomment permission classes after auth feature
+    #  permission_classes = (IsAuthenticated,)
     queryset = Task.objects.order_by('created_at')
     serializer_class = TaskSerializer
 
 
 class RetrieveUpdateDestroyTaskView(RetrieveUpdateDestroyAPIView):
-    # permission_classes = (IsAuthenticated,)
+    # TODO:
+    #  1. Fix create feature. Possible solution:
+    #  https://github.com/beda-software/drf-writable-nested
+    #  2. Uncomment permission classes after auth feature
+    #  permission_classes = (IsAuthenticated,)
     http_method_names = ('get', 'patch', 'delete', 'head', 'options')
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
