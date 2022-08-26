@@ -10,6 +10,8 @@ class UserList(ListAPIView):
     serializer_class = UserSerializer
 
 
-class UserDetail(RetrieveAPIView):
+class RetrieveUserView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    lookup_url_kwarg = 'pk'
+    lookup_field = 'id'

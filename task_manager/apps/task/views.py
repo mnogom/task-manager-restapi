@@ -18,3 +18,5 @@ class RetrieveUpdateDestroyTaskView(RetrieveUpdateDestroyAPIView):
     http_method_names = ('get', 'patch', 'delete', 'head', 'options')
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    lookup_url_kwarg = 'pk'
+    lookup_field = 'id'
