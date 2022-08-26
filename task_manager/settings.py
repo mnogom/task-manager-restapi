@@ -85,14 +85,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
 # TODO: Uncomment after auth feature -------
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-#     ],
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-# }
+#  solution: https://www.django-rest-framework.org/api-guide/authentication/
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    # ],
+}
 # -----------------------------------------
 
 # Database
