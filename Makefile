@@ -19,6 +19,12 @@ load-fixtures:
 	poetry run python manage.py loaddata task_manager/fixtures/labels.yaml; \
 	poetry run python manage.py loaddata task_manager/fixtures/statuses.yaml
 
+superuser:
+	poetry run python manage.py createsuperuser
+
+load-demo-data:
+	poetry run python manage.py loaddata task_manager/tests/fixtures/*.yaml
+
 # ---- Linter, Tests
 lint:
 	poetry run flake8 --config linter-setup.cfg

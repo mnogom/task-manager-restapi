@@ -16,3 +16,5 @@ class RetrieveUpdateDestroyStatusView(RetrieveUpdateDestroyAPIView):
     http_method_names = ('get', 'patch', 'delete', 'head', 'options')
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
+    lookup_url_kwarg = 'pk'
+    lookup_field = 'id'

@@ -1,4 +1,3 @@
-from rest_framework import viewsets
 from .serializers import UserSerializer
 from .models import User
 from rest_framework.generics import (ListAPIView,
@@ -11,6 +10,8 @@ class UserList(ListAPIView):
     serializer_class = UserSerializer
 
 
-class UserDetail(RetrieveAPIView):
+class RetrieveUserView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    lookup_url_kwarg = 'pk'
+    lookup_field = 'id'
