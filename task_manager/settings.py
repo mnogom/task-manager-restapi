@@ -8,6 +8,22 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
+
+TODO: Setup parsers from (??):
+ ```
+    "parses": [
+        "application/json",
+        "application/x-www-form-urlencoded",
+        "multipart/form-data",
+    ],
+ ```
+ to
+ ```
+    "parses": [
+        "application/json",
+        "application/x-www-form-urlencoded",
+    ],
+ ```
 """
 
 import os
@@ -84,17 +100,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
-# TODO: Uncomment after auth feature -------
 #  solution: https://www.django-rest-framework.org/api-guide/authentication/
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    # TODO: Uncomment
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     # ],
 }
-# -----------------------------------------
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
