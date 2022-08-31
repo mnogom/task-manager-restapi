@@ -5,6 +5,7 @@ from django.db import models
 
 
 class User(AbstractUser):
+    """TODO: Add first_name and last_name."""
     username_validator = UnicodeUsernameValidator()
     email_validator = EmailValidator()
     username = models.CharField(verbose_name='username',

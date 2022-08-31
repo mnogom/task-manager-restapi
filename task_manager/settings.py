@@ -158,10 +158,10 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Settings djoser
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': '/user/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '/user/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
-    'SERIALIZERS': {
-    },
+    'LOGIN_FIELD': 'email',
+    'SERIALIZERS': {},
 }
