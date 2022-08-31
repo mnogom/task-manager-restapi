@@ -5,25 +5,30 @@ from django.db import models
 
 
 class User(AbstractUser):
-    """TODO: Add first_name and last_name."""
     username_validator = UnicodeUsernameValidator()
     email_validator = EmailValidator()
     username = models.CharField(verbose_name='username',
                                 max_length=150,
                                 unique=True,
                                 help_text='Your username must be unique',
-                                validators=[username_validator],
+                                validators=[
+                                    username_validator,
+                                ],
                                 error_messages={
-                                    'unique': 'A user with that username already exists.'})
+                                    'unique': 'A user with that username already exists.',
+                                })
     email = models.CharField(verbose_name='email',
                              max_length=150,
                              blank=True,
                              null=True,
                              # unique=True,
                              help_text='Your email must exists and be unique.',
-                             validators=[email_validator],
+                             validators=[
+                                 email_validator,
+                             ],
                              error_messages={
-                                 'unique': 'A user with that email already exists.'})
+                                 'unique': 'A user with that email already exists.',
+                             })
 
     def __str__(self):
         return self.get_full_name() or f'@{self.username}'
