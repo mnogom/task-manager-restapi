@@ -8,6 +8,22 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
+
+TODO: Setup parsers from (??):
+ ```
+    "parses": [
+        "application/json",
+        "application/x-www-form-urlencoded",
+        "multipart/form-data",
+    ],
+ ```
+ to
+ ```
+    "parses": [
+        "application/json",
+        "application/x-www-form-urlencoded",
+    ],
+ ```
 """
 
 import os
@@ -84,17 +100,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'task_manager.wsgi.application'
 
-# TODO: Uncomment after auth feature -------
 #  solution: https://www.django-rest-framework.org/api-guide/authentication/
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    # TODO: Uncomment
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     # ],
 }
-# -----------------------------------------
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -158,10 +173,10 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Settings djoser
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': '/user/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '/user/activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
-    'SERIALIZERS': {
-    },
+    'LOGIN_FIELD': 'email',
+    'SERIALIZERS': {},
 }
