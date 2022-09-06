@@ -1,22 +1,30 @@
 """Serializers."""
 
 from rest_framework import serializers
+from rest_framework.fields import CurrentUserDefault
 
-from task_manager.apps.label.serializers import LabelSerializer
 from task_manager.apps.user.serializers import UserSerializer
+from task_manager.apps.label.serializers import LabelSerializer
+from task_manager.apps.label.models import Label
 from task_manager.apps.status.serializers import StatusSerializer
+from task_manager.apps.status.models import Status
+
 from .models import Task
 
 
-class TaskSerializer(serializers.ModelSerializer):
-    labels = LabelSerializer(many=True)
+class ReadTaskSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     executor = UserSerializer()
-    status = StatusSerializer()
+    status = StatusSerializer(read_only=True,
+                              required=False)
+    labels = LabelSerializer(read_only=True,
+                             many=True,
+                             required=False)
 
     class Meta:
         model = Task
         fields = (
+            'id',
             'name',
             'description',
             'status',
@@ -25,9 +33,27 @@ class TaskSerializer(serializers.ModelSerializer):
             'labels',
         )
 
-    def set_author(self, author_pk: int):
-        """Add author for task object.
-        :param author_pk: author pk (id)
-        """
 
-        self.instance.author_id = author_pk
+class CreateUpdateTaskSerializer(serializers.ModelSerializer):
+    """TODO: Test if user updated task become author (??)"""
+    executor_id = serializers.IntegerField(required=True)
+    author = serializers.HiddenField(default=CurrentUserDefault())
+    status_id = serializers.PrimaryKeyRelatedField(required=False,
+                                                   queryset=Status.objects.all(),
+                                                   source='status')
+    label_ids = serializers.PrimaryKeyRelatedField(required=False,
+                                                   queryset=Label.objects.all(),
+                                                   source='labels',
+                                                   read_only=False,
+                                                   many=True)
+
+    class Meta:
+        model = Task
+        fields = (
+            'name',
+            'description',
+            'executor_id',
+            'author',
+            'status_id',
+            'label_ids',
+        )
