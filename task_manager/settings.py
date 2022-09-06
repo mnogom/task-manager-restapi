@@ -165,3 +165,6 @@ DJOSER = {
     'SERIALIZERS': {
     },
 }
+
+# Settings tests
+FIXTURE_DIRS = [BASE_DIR / 'tests', ]
