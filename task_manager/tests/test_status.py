@@ -67,7 +67,8 @@ def test_create_status_non_unique_name():
 
     response = client.post(reverse_lazy('status:list'), data={'name': status_name})
     assert response.status_code == 400
-    assert error in [statuses for statuses in response.json()['name']]
+    errors = response.json()['name']
+    assert error in errors
 
 
 @pytest.mark.django_db
@@ -79,7 +80,8 @@ def test_create_status_without_name():
     client.force_authenticate(user=user)
 
     response = client.post(reverse_lazy('status:list'), data={'description': status_description})
-    assert error in [statuses for statuses in response.json()['name']]
+    errors = response.json()['name']
+    assert error in errors
     assert response.status_code == 400
 
 
