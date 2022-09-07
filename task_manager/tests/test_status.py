@@ -44,6 +44,8 @@ def test_auth_access():
 def test_create_status():
     status_name = 'new name'
 
+    response_before = client.get(reverse_lazy('status:list'))
+
     user = get_user()
     client.force_authenticate(user=user)
     response = client.post(reverse_lazy('status:list'), data={'name': status_name})
@@ -51,7 +53,96 @@ def test_create_status():
 
     response = client.get(reverse_lazy('status:list'))
     assert len(response.json()) == 7
+    assert len(response_before.json()) + 1 == len(response.json())
     assert status_name in [statuses['name'] for statuses in response.json()]
+
+
+@pytest.mark.django_db
+def test_create_status_non_unique_name():
+    status_name = 'заморожено'
+    error = 'status с таким name уже существует.'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.post(reverse_lazy('status:list'), data={'name': status_name})
+    assert response.status_code == 400
+    errors = response.json()['name']
+    assert error in errors
+
+
+@pytest.mark.django_db
+def test_create_status_without_name():
+    status_description = 'This status without name'
+    error = 'Обязательное поле.'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.post(reverse_lazy('status:list'), data={'description': status_description})
+    errors = response.json()['name']
+    assert error in errors
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_patch_status():
+    pk = 6
+    status_description = 'This status with new description'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response_before = client.get(reverse_lazy('status:list'))
+
+    response = client.patch(reverse_lazy('status:sample',
+                                         kwargs={'pk': pk}),
+                            data={'description': status_description})
+    assert response.status_code == 200
+    assert status_description == response.json()['description']
+
+    response = client.get(reverse_lazy('status:list'))
+    assert len(response_before.json()) == len(response.json())
+
+
+@pytest.mark.django_db
+def test_delete_status():
+    pk = 5
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response_before = client.get(reverse_lazy('status:list'))
+
+    response = client.delete(reverse_lazy('status:sample', kwargs={'pk': pk}))
+    assert response.status_code == 204
+    response = client.get(reverse_lazy('status:sample', kwargs={'pk': pk}))
+    assert response.status_code == 404
+
+    response = client.get(reverse_lazy('status:list'))
+    assert len(response_before.json()) - 1 == len(response.json())
+
+
+@pytest.mark.django_db
+def test_delete_non_existent_status():
+    pk = 100
+    error = 'Страница не найдена.'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response_before = client.get(reverse_lazy('status:list'))
+
+    response = client.delete(reverse_lazy('status:sample', kwargs={'pk': pk}))
+    print(response.json())
+    assert response.status_code == 404
+    assert error == response.json()['detail']
+
+    response = client.get(reverse_lazy('status:sample', kwargs={'pk': pk}))
+    assert response.status_code == 404
+
+    response = client.get(reverse_lazy('status:list'))
+    assert len(response_before.json()) == len(response.json())
 
 
 # @pytest.mark.django_db
