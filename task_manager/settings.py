@@ -178,7 +178,8 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
     'LOGIN_FIELD': 'email',
-    'SERIALIZERS': {},
+    'SERIALIZERS': {
+    }
 }
 
 # Settings tests

@@ -54,6 +54,57 @@ def test_create_status():
     assert status_name in [statuses['name'] for statuses in response.json()]
 
 
+@pytest.mark.django_db
+def test_create_status_non_unique_name():
+    status_name = 'заморожено'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.post(reverse_lazy('status:list'), data={'name': status_name})
+    assert response.status_code == 400
+    assert len(response.json()) == 1
+
+
+@pytest.mark.django_db
+def test_create_status_incomplete_data():
+    status_description = 'This status without name'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.post(reverse_lazy('status:list'), data={'description': status_description})
+    assert len(response.json()) == 1
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_patch_status():
+    pk = 6
+    status_description = 'This status with new description'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.patch(reverse_lazy('status:sample', kwargs={'pk': pk}),  data={'description': status_description})
+    assert len(response.json()) == 3
+    assert response.status_code == 200
+    assert status_description in response.json()['description']
+
+
+@pytest.mark.django_db
+def test_delete_status():
+    pk = 5
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.delete(reverse_lazy('status:sample', kwargs={'pk': pk}))
+    assert response.status_code == 204
+    response = client.get(reverse_lazy('status:sample', kwargs={'pk': pk}))
+    assert response.status_code == 404
+
+
 # @pytest.mark.django_db
 # def test_status():
 #
