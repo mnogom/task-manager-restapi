@@ -93,7 +93,9 @@ def test_patch_status():
 
     response_before = client.get(reverse_lazy('status:list'))
 
-    response = client.patch(reverse_lazy('status:sample', kwargs={'pk': pk}),  data={'description': status_description})
+    response = client.patch(reverse_lazy('status:sample',
+                                         kwargs={'pk': pk}),
+                            data={'description': status_description})
     assert response.status_code == 200
     assert status_description == response.json()['description']
 
