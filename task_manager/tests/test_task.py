@@ -1,9 +1,10 @@
+"""Test task."""
+
 import pytest
 from rest_framework.test import APIClient
 from django.core.management import call_command
 from django.urls import reverse_lazy
 from task_manager.apps.user.models import User
-from task_manager.apps.status.models import Status
 
 client = APIClient()
 
@@ -120,20 +121,84 @@ def test_create_task_with_status_ids():
 
 
 @pytest.mark.django_db
-def test_executor_change_author_task():
-
+def test_executor_change_task():
     task_pk = 10
     task_author_id = 5
+    error = 'У вас недостаточно прав для выполнения данного действия.'
 
     user = get_user()
     client.force_authenticate(user=user)
 
-    response_before = client.get(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
-
-    client.patch(reverse_lazy('task:sample', kwargs={'pk': task_pk}), data={'author': task_author_id})
-
-    response = client.get(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
-
-    assert response.json()['author']['id'] == response_before.json()['author']['id']
+    response = client.patch(reverse_lazy('task:sample', kwargs={'pk': task_pk}),
+                            data={'author': task_author_id})
+    assert error == response.json()['detail']
+    assert response.status_code == 403
 
 
+@pytest.mark.django_db
+def test_author_change_task():
+    task_pk = 4
+    task_name = 'New name task'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.patch(reverse_lazy('task:sample', kwargs={'pk': task_pk}),
+                            data={'name': task_name})
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_executor_delete_task():
+    task_pk = 10
+    error = 'У вас недостаточно прав для выполнения данного действия.'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response_before = client.get(reverse_lazy('task:list'))
+
+    response = client.delete(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
+    assert error == response.json()['detail']
+    assert response.status_code == 403
+
+    response = client.get(reverse_lazy('task:list'))
+    assert len(response_before.json()) == len(response.json())
+
+
+@pytest.mark.django_db
+def test_author_delete_task():
+    task_pk = 4
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response_before = client.get(reverse_lazy('task:list'))
+
+    response = client.delete(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
+    assert response.status_code == 204
+
+    response = client.get(reverse_lazy('task:list'))
+    assert len(response_before.json()) - 1 == len(response.json())
+
+
+@pytest.mark.django_db
+def test_delete_non_existent_task():
+    pk = 100
+    error = 'Страница не найдена.'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response_before = client.get(reverse_lazy('task:list'))
+
+    response = client.delete(reverse_lazy('task:sample', kwargs={'pk': pk}))
+    print(response.json())
+    assert response.status_code == 404
+    assert error == response.json()['detail']
+
+    response = client.get(reverse_lazy('task:sample', kwargs={'pk': pk}))
+    assert response.status_code == 404
+
+    response = client.get(reverse_lazy('task:list'))
+    assert len(response_before.json()) == len(response.json())
