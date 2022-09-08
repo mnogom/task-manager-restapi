@@ -72,6 +72,21 @@ def test_create_status_non_unique_name():
 
 
 @pytest.mark.django_db
+def test_create_status_list_name():
+
+    user = get_user()
+    client.force_authenticate(user=user)
+    response_before = client.get(reverse_lazy('status:list'))
+
+    response = client.post(reverse_lazy('status:list'), data={'name': ['Name1', 'Name2', 'Name3']})
+    print(response.json())
+    assert response.status_code == 201
+
+    response = client.get(reverse_lazy('status:list'))
+    assert len(response_before.json()) + 1 == len(response.json())
+
+
+@pytest.mark.django_db
 def test_create_status_without_name():
     status_description = 'This status without name'
     error = 'Обязательное поле.'
@@ -80,6 +95,19 @@ def test_create_status_without_name():
     client.force_authenticate(user=user)
 
     response = client.post(reverse_lazy('status:list'), data={'description': status_description})
+    errors = response.json()['name']
+    assert error in errors
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_create_status_empty_name():
+    error = 'Это поле не может быть пустым.'
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.post(reverse_lazy('status:list'), data={'name': ''})
     errors = response.json()['name']
     assert error in errors
     assert response.status_code == 400
