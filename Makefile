@@ -35,6 +35,9 @@ test:
 pytest:
 	poetry run pytest
 
+coverage:
+	poetry run pytest --cov=. --cov-report=html
+
 # ---- Django shell
 django-shell:
 	poetry run python manage.py shell
