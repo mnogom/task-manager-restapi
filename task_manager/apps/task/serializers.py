@@ -40,8 +40,9 @@ class ReadTaskSerializer(serializers.ModelSerializer):
 
 
 class CreateUpdateTaskSerializer(serializers.ModelSerializer):
-    """TODO: Test if user updated task become author (??)"""
-    executor_id = serializers.IntegerField(required=True) # TODO: Switch field to PrimaryKeyRelatedField
+
+    # TODO: Switch field to PrimaryKeyRelatedField
+    executor_id = serializers.IntegerField(required=True)
     author = serializers.HiddenField(default=CurrentUserDefault())
     observer_ids = serializers.PrimaryKeyRelatedField(required=False,
                                                       queryset=User.objects.all(),
