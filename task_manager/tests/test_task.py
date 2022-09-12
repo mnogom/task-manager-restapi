@@ -184,7 +184,7 @@ def test_author_delete_task():
 
 @pytest.mark.django_db
 def test_delete_non_existent_task():
-    pk = 100
+    task_pk = 100
     error = 'Страница не найдена.'
 
     user = get_user()
@@ -192,13 +192,28 @@ def test_delete_non_existent_task():
 
     response_before = client.get(reverse_lazy('task:list'))
 
-    response = client.delete(reverse_lazy('task:sample', kwargs={'pk': pk}))
+    response = client.delete(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
     print(response.json())
     assert response.status_code == 404
     assert error == response.json()['detail']
 
-    response = client.get(reverse_lazy('task:sample', kwargs={'pk': pk}))
+    response = client.get(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
     assert response.status_code == 404
 
     response = client.get(reverse_lazy('task:list'))
     assert len(response_before.json()) == len(response.json())
+
+
+@pytest.mark.django_db
+def test_add_observer_task():
+    task_pk = 4
+    task_observer_ids = [2, 10, 1]
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response = client.patch(reverse_lazy('task:sample', kwargs={'pk': task_pk}),
+                            data={'observer_ids': task_observer_ids})
+
+    print(response.json())
+    assert response.status_code == 200

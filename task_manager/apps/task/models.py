@@ -22,6 +22,10 @@ class Task(models.Model):
                                  verbose_name='executor',
                                  on_delete=models.PROTECT,
                                  related_name='executor')
+    observer = models.ManyToManyField('user.User',
+                                      verbose_name='observer',
+                                      related_name='observer',
+                                      blank=True)
     status = models.ForeignKey('status.Status',
                                verbose_name='status',
                                on_delete=models.PROTECT,
