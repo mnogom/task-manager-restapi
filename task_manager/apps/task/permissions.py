@@ -1,3 +1,5 @@
+# TODO: Make ability to read task only for observer/executor/author
+
 from rest_framework import permissions
 
 
