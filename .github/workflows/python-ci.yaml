@@ -25,6 +25,7 @@ jobs:
         run: make pytest
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
 
       - name: Coverage
         run: make coverage
