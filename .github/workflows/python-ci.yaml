@@ -20,7 +20,7 @@ jobs:
       - name: Tests
         run: make pytest
         env:
-          SECRET_KEY: ${{ env.DJANGO_task_manager.SECRET_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
       - name: Coverage
         run: make coverage
