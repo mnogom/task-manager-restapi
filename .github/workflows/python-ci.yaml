@@ -39,6 +39,8 @@ jobs:
       - name: Upload coverage to Codecov
         uses: paambaati/codeclimate-action@v2.7.5
         env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: make coverage
