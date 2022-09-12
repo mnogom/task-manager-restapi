@@ -16,6 +16,9 @@ jobs:
           pip3 install poetry
           make install
 
+      - name: Lint
+        run: make lint
+
       - name: Check migrations
         run: make check-migrations
         env:
@@ -28,15 +31,6 @@ jobs:
           DEBUG: ${{ secrets.DEBUG }}
 
       - name: Coverage
-        run: make coverage
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DEBUG: ${{ secrets.DEBUG }}
-
-      - name: Lint
-        run: make lint
-
-      - name: Upload coverage to Codecov
         uses: paambaati/codeclimate-action@v2.7.5
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
