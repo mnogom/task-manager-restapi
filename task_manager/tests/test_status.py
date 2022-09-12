@@ -1,5 +1,6 @@
 """Test status."""
-# email feature: https://www.django-rest-framework.org/api-guide/testing/#force_authenticateusernone-tokennone
+# email feature:
+# https://www.django-rest-framework.org/api-guide/testing/#force_authenticateusernone-tokennone
 # https://djangostars.com/blog/django-pytest-testing/ // 7. Test Mail Outbox with Pytest
 
 
