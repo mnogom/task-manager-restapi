@@ -19,6 +19,9 @@ jobs:
       - name: Check migrations
         run: make check-migrations
 
+      - name: Migrations
+        run: make migrate
+
       - name: Tests
         run: make pytest
         env:
