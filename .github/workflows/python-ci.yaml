@@ -22,7 +22,7 @@ jobs:
           DEBUG: ${{ secrets.DEBUG }}
 
       - name: Tests
-        run: make pytest
+        run: make test
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DEBUG: ${{ secrets.DEBUG }}
