@@ -17,3 +17,4 @@ tmp
 .htaccess
 passenger_wsgi.py
 *.icloud
+htmlcov

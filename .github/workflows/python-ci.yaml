@@ -1,0 +1,39 @@
+name: python-ci
+
+on: [push]
+
+jobs:
+ build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+
+      - name: Setup dependencies
+        run: |
+          pip3 install poetry
+          make install
+
+      - name: Check migrations
+        run: make check-migrations
+        env:
+          DEBUG: ${{ secrets.DEBUG }}
+
+      - name: Tests
+        run: make pytest
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+
+      - name: Coverage
+        run: make coverage
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+
+      - name: Lint
+        run: make lint
+
+

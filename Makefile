@@ -32,6 +32,12 @@ lint:
 test:
 	echo poetry run coverage run --source '.' manage.py test task_manager/apps/
 
+pytest:
+	poetry run pytest
+
+coverage:
+	poetry run pytest --cov=. --cov-report=html
+
 # ---- Django shell
 django-shell:
 	poetry run python manage.py shell
