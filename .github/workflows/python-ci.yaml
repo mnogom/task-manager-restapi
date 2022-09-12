@@ -30,6 +30,7 @@ jobs:
       - name: Coverage
         run: make coverage
         env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
           DEBUG: ${{ secrets.DEBUG }}
 
       - name: Lint
