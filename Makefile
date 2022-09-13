@@ -30,13 +30,10 @@ lint:
 	poetry run flake8 --config linter-setup.cfg
 
 test:
-	echo poetry run coverage run --source '.' manage.py test task_manager/apps/
-
-pytest:
 	poetry run pytest
 
 coverage:
-	poetry run pytest --cov=. --cov-report=html
+	poetry run pytest --cov=task_manager --cov-report=xml
 
 # ---- Django shell
 django-shell:
