@@ -6,11 +6,11 @@ from rest_framework.permissions import IsAuthenticated  # noqa: F401
 from .models import Task
 from .serializers import (ReadTaskSerializer,
                           CreateUpdateTaskSerializer)
-from .permissions import PermissionsTask
+from .permissions import ChangeByAuthorOnly
 
 
 class ListCreateTaskView(ListCreateAPIView):
-    permission_classes = (PermissionsTask, )
+    permission_classes = (ChangeByAuthorOnly, )
     queryset = Task.objects.order_by('created_at')
     serializer_read_class = ReadTaskSerializer
     serializer_create_class = CreateUpdateTaskSerializer
@@ -24,7 +24,7 @@ class ListCreateTaskView(ListCreateAPIView):
 
 
 class RetrieveUpdateDestroyTaskView(RetrieveUpdateDestroyAPIView):
-    permission_classes = (PermissionsTask, )
+    permission_classes = (ChangeByAuthorOnly, )
     http_method_names = ('get', 'patch', 'delete', 'head', 'options')
     queryset = Task.objects.all()
     serializer_read_class = ReadTaskSerializer

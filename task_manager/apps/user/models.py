@@ -19,9 +19,9 @@ class User(AbstractUser):
                                 })
     email = models.CharField(verbose_name='email',
                              max_length=150,
-                             blank=True,
-                             null=True,
-                             # unique=True,
+                             # blank=True, TODO: remove
+                             # null=True,  TODO: remove
+                             unique=True,
                              help_text='Your email must exists and be unique.',
                              validators=[
                                  email_validator,
@@ -29,6 +29,8 @@ class User(AbstractUser):
                              error_messages={
                                  'unique': 'A user with that email already exists.',
                              })
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.get_full_name() or f'@{self.username}'
