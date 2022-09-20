@@ -19,8 +19,6 @@ class User(AbstractUser):
                                 })
     email = models.CharField(verbose_name='email',
                              max_length=150,
-                             # blank=True, TODO: remove
-                             # null=True,  TODO: remove
                              unique=True,
                              help_text='Your email must exists and be unique.',
                              validators=[
