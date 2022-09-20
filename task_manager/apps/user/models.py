@@ -4,6 +4,8 @@ from django.core.validators import EmailValidator
 from django.db import models
 
 
+# TODO: add fields 'first_name' and 'last_name' as required for registration [??]
+
 class User(AbstractUser):
     username_validator = UnicodeUsernameValidator()
     email_validator = EmailValidator()
