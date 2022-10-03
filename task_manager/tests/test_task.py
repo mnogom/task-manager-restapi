@@ -123,16 +123,39 @@ def test_create_task_with_status_ids():
 @pytest.mark.django_db
 def test_executor_change_task():
     task_pk = 10
-    task_author_id = 5
-    error = 'У вас недостаточно прав для выполнения данного действия.'
+    # task_author_id = 5
+    task_label_ids = [2, 3]
+    # error = 'У вас недостаточно прав для выполнения данного действия.'
 
     user = get_user()
     client.force_authenticate(user=user)
 
+    response_before = client.get(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
     response = client.patch(reverse_lazy('task:sample', kwargs={'pk': task_pk}),
-                            data={'author': task_author_id})
-    assert error == response.json()['detail']
-    assert response.status_code == 403
+                            data={'label_ids': task_label_ids})
+
+    # assert error == response.json()['detail']
+    # assert response.status_code == 403
+    response = client.get(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
+    assert response.json()['labels'][0]['id'] == response_before.json()['labels'][0]['id']
+
+
+@pytest.mark.django_db
+def test_executor_change_status_task():
+    task_pk = 10
+
+    user = get_user()
+    client.force_authenticate(user=user)
+
+    response_before = client.get(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
+
+    response = client.patch(reverse_lazy('task:sample', kwargs={'pk': task_pk}),
+                            data={'status_id': 3})
+
+    assert response.status_code == 200
+
+    response = client.get(reverse_lazy('task:sample', kwargs={'pk': task_pk}))
+    assert response_before.json()['status']['id'] != response.json()['status']['id']
 
 
 @pytest.mark.django_db
