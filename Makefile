@@ -35,7 +35,7 @@ test:
 	poetry run pytest
 
 coverage:
-	poetry run pytest --cov=task_manager --cov-report=xml
+	poetry run pytest --cov=task_manager --cov-report=term --cov-report=xml
 
 # ---- Django shell
 django-shell:
