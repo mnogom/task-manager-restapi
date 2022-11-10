@@ -14,9 +14,8 @@ COPY . .
 # install dependecies
 RUN pip3 install --upgrade pip
 RUN pip3 install poetry
-RUN poetry config virtualenvs.in-project true --local
 COPY poetry.lock pyproject.toml ./
-RUN poetry install
+RUN poetry install --no-interaction --no-ansi
 
 # run entrypoint.sh
 ENTRYPOINT [ "/usr/src/app/entrypoint.sh" ]
