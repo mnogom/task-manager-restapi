@@ -16,8 +16,10 @@ flush:
 	poetry run python manage.py flush
 
 load-fixtures:
-	poetry run python manage.py loaddata task_manager/fixtures/labels.yaml; \
-	poetry run python manage.py loaddata task_manager/fixtures/statuses.yaml
+	poetry run python manage.py loaddata task_manager/tests/fixtures/labels.yaml; \
+	poetry run python manage.py loaddata task_manager/tests/fixtures/statuses.yaml; \
+	poetry run python manage.py loaddata task_manager/tests/fixtures/users.yaml; \
+	poetry run python manage.py loaddata task_manager/tests/fixtures/tasks.yaml
 
 superuser:
 	poetry run python manage.py createsuperuser
@@ -42,3 +44,14 @@ django-shell:
 # ---- Run
 run:
 	poetry run python manage.py runserver
+
+# ---- Docker
+build-image:
+	docker build -t task_manager .
+
+# ---- Docker-compose
+dev-run:
+	docker-compose -f docker-compose.dev.yml up --build --force-recreate --renew-anon-volumes
+
+dev-stop:
+	docker-compose -f docker-compose.dev.yml down -v
