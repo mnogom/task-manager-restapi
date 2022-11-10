@@ -68,3 +68,30 @@ class CreateUpdateTaskSerializer(serializers.ModelSerializer):
             'status_id',
             'label_ids',
         )
+
+
+class UpdateStatusTaskByExecutorSerializer(serializers.ModelSerializer):
+
+    # TODO: Switch field to PrimaryKeyRelatedField
+    executor_id = serializers.IntegerField(read_only=True)
+    author = serializers.HiddenField(default=CurrentUserDefault())
+    observer_ids = serializers.PrimaryKeyRelatedField(source='observer',
+                                                      many=True,
+                                                      read_only=True)
+    status_id = serializers.PrimaryKeyRelatedField(queryset=Status.objects.all(),
+                                                   source='status')
+    label_ids = serializers.PrimaryKeyRelatedField(source='labels',
+                                                   read_only=True,
+                                                   many=True)
+
+    class Meta:
+        model = Task
+        fields = (
+            'name',
+            'description',
+            'executor_id',
+            'author',
+            'observer_ids',
+            'status_id',
+            'label_ids',
+        )
