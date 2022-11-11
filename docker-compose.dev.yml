@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  app:
+    build: ./
+    command: poetry run python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./task_manager/:/usr/src/app/task_manager/
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  db:
+    image: nouchka/sqlite3:latest
+    stdin_open: true
+    tty: true
+    volumes:
+      - local_sqllite_data:/usr/src/app/task_manager/
+
+  redis:
+    image: redis:alpine
+    depends_on:
+      - app
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A app worker -l info
+    volumes:
+      - ./task_manager/:/usr/src/app/task_manager/
+    env_file:
+      - .env
+    depends_on:
+      - app
+      - redis
+      - db
+
+volumes:
+  local_sqllite_data: {}
