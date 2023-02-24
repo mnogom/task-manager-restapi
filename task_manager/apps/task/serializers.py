@@ -60,6 +60,7 @@ class CreateUpdateTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = (
+            'id',
             'name',
             'description',
             'executor_id',
@@ -87,6 +88,7 @@ class UpdateStatusTaskByExecutorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = (
+            'id',
             'name',
             'description',
             'executor_id',
