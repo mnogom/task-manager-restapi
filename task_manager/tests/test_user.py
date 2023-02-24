@@ -19,7 +19,6 @@ def django_db_setup(django_db_setup, django_db_blocker):
 @pytest.mark.django_db
 def test_create_user():
     register_url = "/api/v1/auth/users/"
-    activate_url = "/api/v1/auth/users/activation/"
     login_url = "/api/v1/auth/token/login/"
 
     username = 'test_user'
@@ -35,25 +34,10 @@ def test_create_user():
 
     # Activation check
     user = User.objects.filter(email=email).first()
-    assert user.is_active is False
+    assert user.is_active is True
 
     response = client.get(reverse_lazy('user:list'))
     assert response.status_code == 401
-
-    # Activation message
-    text_message = mail.outbox[0].body
-    link_activation = text_message.split("\n")[3]
-    link_activation_list = link_activation.split('/')
-
-    uid = link_activation_list[6]
-    token = link_activation_list[7]
-
-    # Activation
-    client.post(activate_url, data={'uid': uid, 'token': token})
-
-    # Activation check
-    user = User.objects.filter(email=email).first()
-    assert user.is_active is True
 
     # Get token
     response = client.post(login_url, data={'email': email,
