@@ -51,7 +51,6 @@ def test_create_task():
     response = client.post(reverse_lazy('task:list'), data={'name': task_name,
                                                             'author': user,
                                                             'executor_id': executor_id})
-    print(response.data)
     assert response.status_code == 201
 
     response = client.get(reverse_lazy('task:list'))
@@ -80,7 +79,6 @@ def test_create_task_with_all_data():
                                                             'status_id': task_status_id,
                                                             'label_ids': task_label_ids,
                                                             })
-    print(response.data)
     assert response.status_code == 201
 
     response = client.get(reverse_lazy('task:list'))
